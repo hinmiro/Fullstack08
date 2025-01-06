@@ -7,11 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/libraryApollo.js",
     "dev": "nodemon src/libraryApollo.js"
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.11.3"
+  },
+  "devDependencies": {
+    "prettier": "3.4.2"
   }
 }
