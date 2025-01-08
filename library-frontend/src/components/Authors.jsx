@@ -1,7 +1,11 @@
 import {useQuery} from "@apollo/client"
 import {ALL_AUTHORS} from "../services/queries";
+import AuthorBirth from "./AuthorBirth.jsx";
+import {useState} from "react";
+import Notify from "./Notify.jsx";
 
 const Authors = () => {
+    const [error, setError] = useState(null)
     const result = useQuery(ALL_AUTHORS)
 
     if (result.loading) {
@@ -13,6 +17,7 @@ const Authors = () => {
 
     return (
         <div>
+            <Notify errorMessage={error} />
             <h2>authors</h2>
             <table>
                 <tbody>
@@ -30,6 +35,7 @@ const Authors = () => {
                 ))}
                 </tbody>
             </table>
+            <AuthorBirth setError={setError} authors={authors}/>
         </div>
     )
 }
