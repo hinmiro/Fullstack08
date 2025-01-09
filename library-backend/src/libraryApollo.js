@@ -79,55 +79,70 @@ const resolvers = {
                 return books.filter(
                     (book) =>
                         book.author.name === author &&
-                        book.genres.includes('genre')
+                        book.genres.includes(genre)
                 )
             }
+
             if (genre) {
                 return books.filter((book) => book.genres.includes(genre))
             }
-            return books.filter((book) => book.author === args.author)
+
+            return books.filter((book) => book.author.name === author)
         },
         allAuthors: async () => {
             let authors = await Author.find({})
             const books = await Book.find({}).populate('author')
 
-            return authors.map((author) => {
+            const allAuthors = authors.map((author) => {
                 const bookCount = books.filter(
                     (book) => book.author.name === author.name
                 ).length
-                return { ...author.toObject(), bookCount: bookCount }
+                return {
+                    ...author.toObject({
+                        transform: (doc, ret) => {
+                            ret.id = ret._id
+                            delete ret._id
+                            delete ret.__v
+                        },
+                    }),
+                    bookCount: bookCount,
+                }
             })
+            console.log(allAuthors)
+            return allAuthors
         },
     },
 
-    /*Mutation: {
-        addBook: (root, args) => {
+    Mutation: {
+        addBook: async (root, args) => {
             let { author } = args
-            const existingAuthor = authors.find((a) => a.name === author)
+            const existingAuthor = await Author.findOne({ name: author })
+
             if (!existingAuthor) {
-                const newAuthor = { name: author, id: uuid() }
-                authors = authors.concat(newAuthor)
+                const newAuthor = new Author({ name: author })
+                author = await newAuthor.save()
             } else {
                 author = existingAuthor
             }
 
-            const newBook = { ...args, author: author, id: uuid() }
-            books = books.concat(newBook)
-            return newBook
+            const newBook = new Book({ ...args, author: author })
+            const savedNewBook = await newBook.save()
+            return savedNewBook.populate('author')
         },
 
-        editAuthor: (root, args) => {
+        editAuthor: async (root, args) => {
             const { name, setToBorn } = args
-            const author = authors.find((a) => a.name === name)
-
-            if (!author) {
+            if (!Author.exists({ name: name })) {
                 return null
             }
-            const updatedAuthor = { ...author, born: setToBorn }
-            authors = authors.map((a) => (a.name === name ? updatedAuthor : a))
-            return updatedAuthor
+
+            return Author.findOneAndUpdate(
+                { name: name },
+                { born: setToBorn },
+                { new: true }
+            )
         },
-    },*/
+    },
 }
 
 const server = new ApolloServer({
