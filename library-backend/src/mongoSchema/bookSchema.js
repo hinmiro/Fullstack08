@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 const uniqueValidator = require('mongoose-unique-validator')
 
 const schema = new mongoose.Schema(
@@ -12,6 +11,7 @@ const schema = new mongoose.Schema(
         },
         published: {
             type: Number,
+            required: true,
         },
         author: {
             type: mongoose.Schema.Types.ObjectId,
