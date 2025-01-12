@@ -4,7 +4,7 @@ import AuthorBirth from "./AuthorBirth.jsx";
 import {useState} from "react";
 import Notify from "./Notify.jsx";
 
-const Authors = ({token}) => {
+const Authors = () => {
     const [error, setError] = useState(null)
     const result = useQuery(ALL_AUTHORS)
 

@@ -24,9 +24,9 @@ const App = () => {
             <Router>
                 <Navigation token={token} setToken={setToken} />
                 <Routes>
-                    <Route path="/" element={<Books setAppBooks={setBooks}/>} />
-                    <Route path="/authors" element={<Authors token={token} />} />
-                    <Route path="/add" element={<NewBook token={token} />} />
+                    <Route path="/" element={<Books setAppBooks={setBooks} />} />
+                    <Route path="/authors" element={<Authors />} />
+                    <Route path="/add" element={<NewBook />} />
                     <Route path="/login" element={<LoginForm setToken={setToken} />} />
                     <Route path="/user/recommend" element={<Recommend books={books} />} />
                 </Routes>

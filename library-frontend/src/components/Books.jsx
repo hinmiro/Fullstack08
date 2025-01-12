@@ -44,7 +44,7 @@ const Books = ({setAppBooks}) => {
                 ))}
                 </tbody>
             </table>
-            <GenreSorting books={books} setGenre={setGenre} sorted={sorted} setSorted={setSorted} />
+            <GenreSorting books={books} setGenre={setGenre} setSorted={setSorted} />
         </div>
     )
 }
