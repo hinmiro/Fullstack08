@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useMutation} from "@apollo/client";
 import {ADD_BOOK, ALL_AUTHORS, ALL_BOOKS} from "../services/queries.js";
 
-const NewBook = () => {
+const NewBook = ({token}) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [published, setPublished] = useState(null)
