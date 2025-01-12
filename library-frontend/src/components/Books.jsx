@@ -1,19 +1,33 @@
-import {useQuery} from "@apollo/client";
-import {ALL_BOOKS} from "../services/queries.js";
+import { useQuery } from '@apollo/client'
+import { ALL_BOOKS } from '../services/queries.js'
+import GenreSorting from './GenreSorting.jsx'
+import { useEffect, useState } from 'react'
 
-const Books = () => {
+const Books = ({setAppBooks}) => {
+    const [books, setBooks] = useState([])
+    const [sorted, setSorted] = useState([])
+    const [genre, setGenre] = useState('All genres')
+
     const result = useQuery(ALL_BOOKS)
 
-    if(result.loading) {
+    useEffect(() => {
+        if (result.data) {
+            setBooks(result.data.allBooks)
+            setSorted(result.data.allBooks)
+            setAppBooks(result.data.allBooks)
+        }
+    }, [result.data])
+
+
+    if (result.loading) {
         return <div>Loading data...</div>
     }
 
-    const books = result.data.allBooks
 
     return (
         <div>
-            <h2>books</h2>
-
+            <h2>Books</h2>
+            <p>Books in genre: {genre}</p>
             <table>
                 <tbody>
                 <tr>
@@ -21,7 +35,7 @@ const Books = () => {
                     <th>author</th>
                     <th>published</th>
                 </tr>
-                {books.map((a) => (
+                {sorted.map((a) => (
                     <tr key={a.title}>
                         <td>{a.title}</td>
                         <td>{a.author.name}</td>
@@ -30,6 +44,7 @@ const Books = () => {
                 ))}
                 </tbody>
             </table>
+            <GenreSorting books={books} setGenre={setGenre} sorted={sorted} setSorted={setSorted} />
         </div>
     )
 }

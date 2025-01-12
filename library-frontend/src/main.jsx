@@ -22,6 +22,7 @@ const client = new ApolloClient({
     link: authLink.concat(httpLink),
 })
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ApolloProvider client={client}>
         <React.StrictMode>

@@ -21,12 +21,6 @@ const LoginForm = ({ setToken }) => {
         },
     })
 
-    /*useEffect(() => {
-        if (result.data) {
-            const token = result.data.userLogin.value
-            setToken('jwt', token)
-        }
-    }, [result.data])*/
 
     const handleSubmit = async (event) => {
         event.preventDefault()

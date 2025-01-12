@@ -88,7 +88,7 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        me: (root, args, context) => {
+        me: async (root, args, context) => {
             return context.currentUser
         },
         bookCount: async () => Book.collection.countDocuments(),
