@@ -118,8 +118,10 @@ const resolvers = {
                 }
                 // Construct and save new book
                 const newBook = new Book({ ...args, author: author })
-                const savedNewBook = await newBook.save()
-                return savedNewBook.populate('author')
+                let savedNewBook = await newBook.save()
+                savedNewBook = savedNewBook.populate('author')
+                pubsub.publish('BOOK_ADDED', { bookAdded: savedNewBook })
+                return savedNewBook
             } catch (error) {
                 throw new GraphQLError('Saving book failed', {
                     extensions: {
@@ -129,7 +131,6 @@ const resolvers = {
                     },
                 })
             }
-            pubsub.publish('BOOK_ADDED', { bookAdded: book })
         },
 
         editAuthor: async (root, args, context) => {

@@ -1,27 +1,14 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../services/queries.js'
 import GenreSorting from './GenreSorting.jsx'
 import { useEffect, useState } from 'react'
 
-const Books = ({setAppBooks}) => {
-    const [books, setBooks] = useState([])
+const Books = ({ books }) => {
     const [sorted, setSorted] = useState([])
     const [genre, setGenre] = useState('All genres')
 
-    const result = useQuery(ALL_BOOKS)
 
     useEffect(() => {
-        if (result.data) {
-            setBooks(result.data.allBooks)
-            setSorted(result.data.allBooks)
-            setAppBooks(result.data.allBooks)
-        }
-    }, [result.data])
-
-
-    if (result.loading) {
-        return <div>Loading data...</div>
-    }
+        setSorted(books)
+    }, [books])
 
 
     return (

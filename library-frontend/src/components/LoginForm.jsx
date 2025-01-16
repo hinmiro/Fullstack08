@@ -1,22 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LOGIN } from '../services/queries'
 import { useMutation } from '@apollo/client'
-import Notify from './Notify.jsx'
 import { useNavigate } from 'react-router-dom'
 
-const LoginForm = ({ setToken }) => {
+const LoginForm = ({ setToken, setMessage, setColor }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
-    const [color, setColor] = useState('red')
     const navigation = useNavigate()
 
     const [userLogin] = useMutation(LOGIN, {
         onError: error => {
             const messages = error.graphQLErrors.map(e => e.message).join('\n')
-            setError(messages)
+            setColor('red')
+            setMessage(messages)
             setTimeout(() => {
-                setError(null)
+                setMessage(null)
             }, 5000)
         },
     })
@@ -27,16 +25,15 @@ const LoginForm = ({ setToken }) => {
         const result = await userLogin({ variables: { username: username, password: password } })
         if (result.data) {
             const token = result.data.login.value
-            console.log(token)
             setToken(token)
             localStorage.setItem('jwt', token)
-            setError('Login success')
+            setMessage('Login success')
             setColor('green')
+            navigation('/')
             setTimeout(() => {
-                setError(null)
+                setMessage(null)
                 setColor('red')
-                navigation('/')
-            }, 2000)
+            }, 4000)
         }
 
         setUsername('')
@@ -47,7 +44,6 @@ const LoginForm = ({ setToken }) => {
         <>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div>
-                    <Notify errorMessage={error} color={color} />
                     <h3 style={{ textAlign: 'center' }}>User login</h3>
                     <form onSubmit={handleSubmit}>
                         <div>

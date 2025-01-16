@@ -1,17 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useApolloClient } from '@apollo/client'
 
-const Navigation = ({ token, setToken }) => {
+const Navigation = ({ token, setToken, setMessage, setColor }) => {
     const margin = { margin: 10 }
     const client = useApolloClient()
     const navigate = useNavigate()
 
 
     const logout = () => {
+        setMessage('Logged out')
+        setColor('red')
         setToken(null)
         localStorage.clear()
         client.resetStore()
         navigate("/")
+        setTimeout(() => {
+            setMessage(null)
+        }, 4000)
     }
 
 
